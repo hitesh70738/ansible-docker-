@@ -1,0 +1,48 @@
+# run on all hosts
+- hosts: all
+  #run as the root user on the remote machine
+  become: true
+  #declares some variable that can be used throughout the playbook
+  #list of tasks to run on the remote machine
+  tasks: 
+  - name: 'Install packages to allow apt'
+    apt:
+      pkg:
+      - apt-transport-https
+      - ca-certificates 
+      - curl 
+      - gnupg-agent 
+      - software-properties-common
+      - python3-pip  
+      state: latest
+      update_cache: true
+
+  - name: 'Add docker GPG apt key'
+    apt_key:
+      url: https://download.docker.com/linux/ubuntu/gpg
+      state: present 
+
+  - name: 'Add docker repo'
+    apt_repository: 
+      repo: deb https://download.docker.com/linux/ubuntu bionic stable
+      state: present
+
+  - name: 'Update apt install latest packages'
+    apt: 
+      pkg:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      state: latest
+      update_cache: true
+ 
+  
+
+
+
+
+
+
+
+
+
